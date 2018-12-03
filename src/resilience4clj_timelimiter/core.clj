@@ -1,4 +1,4 @@
-(ns resilience4clj-timeliter.core
+(ns resilience4clj-timelimiter.core
   (:import
    (io.github.resilience4j.timelimiter TimeLimiterConfig
                                        TimeLimiter)
@@ -8,24 +8,16 @@
                          Callable)
    (java.time Duration)))
 
+(defn ^:private anom-map
+  [category msg]
+  {:resilience4clj.anomaly/category (keyword "resilience4clj.anomaly" (name category))
+   :resilience4clj.anomaly/message msg})
 
-#_(let [config (.build (doto (TimeLimiterConfig/custom)
-                         (.timeoutDuration (Duration/ofSeconds 5))
-                         (.cancelRunningFuture false)))
-        time-limiter (TimeLimiter/of config)
-        executor-service (Executors/newSingleThreadExecutor)
-        future-supplier (reify Supplier
-                          (get [this]
-                            (.submit executor-service (reify Callable
-                                                        (call [this]
-                                                          (Thread/sleep 7000)
-                                                          (println "Did run")
-                                                          "Hello World")))))
-        decorated-call (TimeLimiter/decorateFutureSupplier time-limiter future-supplier)]
-    (let [result (Try/ofCallable decorated-call)]
-      (if (.isSuccess result)
-        (println (.get result))
-        (println "Nope!!!"))))
+(defn ^:private anomaly!
+  ([name msg]
+   (throw (ex-info msg (anom-map name msg))))
+  ([name msg cause]
+   (throw (ex-info msg (anom-map name msg) cause))))
 
 (defn ^:private config-data->time-limiter-config
   [{:keys [timeout-duration cancel-running-future?]}]
@@ -59,24 +51,21 @@
 
 (defn decorate
   [f time-limiter]
-  (with-meta
-    (fn [& args]
-      (let [fetch-callable? (-> args last :resilience4clj/fetch-callable?)
-            executor-service (Executors/newSingleThreadExecutor)
-            future-supplier (reify Supplier
-                              (get [this]
-                                (.submit executor-service
-                                         (reify Callable
-                                           (call [this] (apply f args))))))
-            decorated-callable (TimeLimiter/decorateFutureSupplier time-limiter future-supplier)]
-        (if fetch-callable?
-          decorated-callable
-          (let [result (Try/ofCallable decorated-callable)]
-            (if (.isSuccess result)
-              (.get result)
-              (throw (.getCause result)))))))
-    {:resilience4clj/callable-available? true}))
-
+  (fn [& args]
+    (let [executor-service (Executors/newSingleThreadExecutor)
+          future-supplier (reify Supplier
+                            (get [this]
+                              (.submit executor-service
+                                       (reify Callable
+                                         (call [this] (apply f args))))))
+          decorated-callable (TimeLimiter/decorateFutureSupplier time-limiter future-supplier)]
+      (let [result (Try/ofCallable decorated-callable)]
+        (if (.isSuccess result)
+          (.get result)
+          (let [cause (.getCause result)]
+            (if (instance? java.util.concurrent.TimeoutException cause)
+              (anomaly! :execution-timeout "Execution timed out" (.getCause result))
+              (throw cause))))))))
 
 
 
@@ -92,14 +81,43 @@
   (def time-limiter3 (create {:timeout-duration 2000}))
   (config time-limiter3)
 
-  (defn external-call []
-    "Do something external")
+  ;; mock for an external call
+  (defn external-call
+    ([n]
+     (external-call n nil))
+    ([n {:keys [fail? wait]}]
+     (when wait
+       (Thread/sleep wait))
+     (if-not fail?
+       (str "Hello " n "!")
+       (anomaly! :broken-hello "Couldn't say hello"))))
 
   
-  (decorate external-call
-            time-limiter)
+  (def limited-call (decorate external-call
+                              time-limiter))
 
-  (-> external-call
-      timelimiter/decorate
-      breaker/decorate)
-  )
+  (try
+    (limited-call "World" {:wait 100 :fail? true})
+    (catch Throwable e
+      (println (ex-data e))
+      (println (type e))
+      (throw e)))
+
+  (defn side-effect! [a]
+    (Thread/sleep 300)
+    (swap! a inc))
+
+  (def dec-side! (decorate side-effect! (create {:cancel-running-future? false
+                                                 :timeout-duration 200})))
+  
+  (let [a (atom 0)]
+    (try
+      (dec-side! a)
+      (catch Throwable e)
+      (finally
+        (Thread/sleep 300)
+        (println @a))))
+  
+  #_(-> external-call
+        timelimiter/decorate
+        breaker/decorate))
