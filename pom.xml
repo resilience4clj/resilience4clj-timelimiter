@@ -2,9 +2,9 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>resilience4clj</groupId>
-  <artifactId>resilience4clj-circuitbreaker</artifactId>
+  <artifactId>resilience4clj-timelimiter</artifactId>
   <version>0.1.0</version>
-  <name>resilience4clj-circuitbreaker</name>
+  <name>resilience4clj-timelimiter</name>
 
   <dependencies>
     <dependency>
@@ -22,9 +22,9 @@
   <packaging>clojure</packaging>
 
   <scm>
-    <connection>scm:git:git@github.com:luchiniatwork/resilience4clj-circuitbreaker.git</connection>
-    <developerConnection>scm:git:git@github.com:luchiniatwork/resilience4clj-circuitbreaker.git</developerConnection>
-    <url>https://github.com/luchiniatwork/resilience4clj-circuitbreaker</url>
+    <connection>scm:git:git@github.com:luchiniatwork/resilience4clj-timelimiter.git</connection>
+    <developerConnection>scm:git:git@github.com:luchiniatwork/resilience4clj-timelimiter.git</developerConnection>
+    <url>https://github.com/luchiniatwork/resilience4clj-timelimiter</url>
   </scm>
 
   <distributionManagement>
