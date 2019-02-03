@@ -211,6 +211,6 @@ an issue.
 
 ## License
 
-Copyright © 2017 Tiago Luchini
+Copyright © 2019 Tiago Luchini
 
 Distributed under the MIT License.
