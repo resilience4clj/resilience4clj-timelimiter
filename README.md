@@ -1,4 +1,4 @@
-[all-modules]: https://github.com/luchiniatwork/resilience4clj-circuitbreaker/#all-modules
+[about]: https://github.com/luchiniatwork/resilience4clj-circuitbreaker/blob/master/docs/ABOUT.md
 [breaker]: https://github.com/luchiniatwork/resilience4clj-circuitbreaker/
 [circleci-badge]: https://circleci.com/gh/luchiniatwork/resilience4clj-timelimiter.svg?style=shield&circle-token=416058ed576b28e43f7ac5e0e055cf483cc0f9e0
 [circleci]: https://circleci.com/gh/luchiniatwork/resilience4clj-timelimiter
@@ -11,8 +11,6 @@
 
 # Resilience4Clj Time Limiter
 
-> Fault tolerance library set designed for simple functional programming
-
 [![CircleCI][circleci-badge]][circleci]
 [![Clojars][clojars-badge]][clojars]
 [![License][license-badge]][license]
@@ -23,21 +21,14 @@ top of GitHub's Resilience4j and inspired by Netflix Hystrix. It was
 designed for Clojure and functional programming with composability in
 mind.
 
-The three core benefits of Resilience4clj are:
+Read more about the [motivation and details of Resilience4clj
+here][about].
 
-1. The library set has very few dependencies making it extremely
-   lightweight
-2. You don’t have to go all-in; you can pick what features you need
-   (See [All modules][all-modules] for a list of what you can cherry
-   pick from)
-3. functional and highly composable interfaces to let you mix and
-   match as you see fit
-
-> Resilience4Clj Time Limiter lets you decorate a function call with a
-> specified time limit. If the function does not return within the
-> established time, an exception is thrown. This is particularly
-> useful for external dependencies that may be too slow and you have
-> time budgets for them.
+Resilience4Clj Time Limiter lets you decorate a function call with a
+specified time limit. If the function does not return within the
+established time, an exception is thrown. This is particularly useful
+for external dependencies that may be too slow and you have time
+budgets for them.
 
 ## Table of Contents
 
@@ -165,7 +156,7 @@ thrown. Its payload can be extracted with `ex-data` and the key
 
 ## Composing Further
 
-Resilience4clj is composed of [several modules][all-modules] that
+Resilience4clj is composed of [several modules][about] that
 easily compose together. For instance, if you are also using the
 [circuit breaker module][breaker] and assuming your import and basic
 settings look like this:
