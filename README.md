@@ -134,8 +134,8 @@ example, any function decorated with `limiter` will timeout in 300ms
 and calls will not be canceled if a timeout occurs.
 
 ``` clojure
-(def limiter (create {:timeout-duration 300
-                      :cancel-running-future? false}))
+(def limiter (tl/create {:timeout-duration 300
+                         :cancel-running-future? false}))
 ```
 
 ## Exception Handling
