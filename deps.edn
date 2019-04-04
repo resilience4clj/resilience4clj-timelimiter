@@ -1,7 +1,7 @@
 {:paths ["src"]
  
  :deps
- {org.clojure/clojure                             {:mvn/version "1.9.0"}
+ {org.clojure/clojure                             {:mvn/version "1.10.0"}
   io.github.resilience4j/resilience4j-timelimiter {:mvn/version "0.13.2"}}
 
  :aliases
@@ -13,5 +13,5 @@
   :test
   {:extra-paths ["test"]
    :extra-deps
-   {lambdaisland/kaocha {:mvn/version "0.0-266"}}
+   {lambdaisland/kaocha {:mvn/version "0.0-413"}}
    :main-opts ["-m" "kaocha.runner"]}}}
