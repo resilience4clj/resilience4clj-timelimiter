@@ -2,10 +2,14 @@
   (:import
    (io.github.resilience4j.timelimiter TimeLimiterConfig
                                        TimeLimiter)
+
    (io.vavr.control Try)
+
    (java.util.function Supplier)
+
    (java.util.concurrent Executors
                          Callable)
+
    (java.time Duration)))
 
 (defn ^:private anom-map
@@ -23,11 +27,14 @@
   [{:keys [timeout-duration cancel-running-future?]}]
   (.build
    (cond-> (TimeLimiterConfig/custom)
-     timeout-duration (.timeoutDuration (Duration/ofMillis timeout-duration))
-     (not (nil? cancel-running-future?)) (.cancelRunningFuture cancel-running-future?))))
+     timeout-duration
+     (.timeoutDuration ^Duration (Duration/ofMillis timeout-duration))
+
+     (not (nil? cancel-running-future?))
+     (.cancelRunningFuture cancel-running-future?))))
 
 (defn ^:private time-limiter-config->config-data
-  [limiter-config]
+  [^TimeLimiterConfig limiter-config]
   {:timeout-duration (.toMillis (.getTimeoutDuration limiter-config))
    :cancel-running-future? (.shouldCancelRunningFuture limiter-config)})
 
@@ -40,11 +47,11 @@
    (create nil))
   ([opts]
    (if opts
-     (TimeLimiter/of (config-data->time-limiter-config opts))
+     (TimeLimiter/of ^TimeLimiterConfig (config-data->time-limiter-config opts))
      (TimeLimiter/ofDefaults))))
 
 (defn config
-  [time-limiter]
+  [^TimeLimiter time-limiter]
   (-> time-limiter
       .getTimeLimiterConfig
       time-limiter-config->config-data))
