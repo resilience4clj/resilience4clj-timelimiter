@@ -138,6 +138,15 @@ and calls will not be canceled if a timeout occurs.
                          :cancel-running-future? false}))
 ```
 
+The function `config` returns the configuration of a limiter in case
+you need to inspect it. Example:
+
+``` clojure
+(tl/config limiter)
+=> {:timeout-duration 1000
+    :cancel-running-future? true}
+```
+
 ## Exception Handling
 
 When a timeout occurs, an instance of `ExceptionInfo` will be
