@@ -1,10 +1,10 @@
-[about]: https://github.com/luchiniatwork/resilience4clj-circuitbreaker/blob/master/docs/ABOUT.md
-[breaker]: https://github.com/luchiniatwork/resilience4clj-circuitbreaker/
-[circleci-badge]: https://circleci.com/gh/luchiniatwork/resilience4clj-timelimiter.svg?style=shield&circle-token=416058ed576b28e43f7ac5e0e055cf483cc0f9e0
-[circleci]: https://circleci.com/gh/luchiniatwork/resilience4clj-timelimiter
+[about]: https://github.com/resilience4clj/resilience4clj-circuitbreaker/blob/master/docs/ABOUT.md
+[breaker]: https://github.com/resilience4clj/resilience4clj-circuitbreaker/
+[circleci-badge]: https://circleci.com/gh/resilience4clj/resilience4clj-timelimiter.svg?style=shield&circle-token=416058ed576b28e43f7ac5e0e055cf483cc0f9e0
+[circleci]: https://circleci.com/gh/resilience4clj/resilience4clj-timelimiter
 [clojars-badge]: https://img.shields.io/clojars/v/resilience4clj/resilience4clj-timelimiter.svg
 [clojars]: http://clojars.org/resilience4clj/resilience4clj-timelimiter
-[github-issues]: https://github.com/luchiniatwork/resilience4clj-timelimiter/issues
+[github-issues]: https://github.com/resilience4clj/resilience4clj-timelimiter/issues
 [license-badge]: https://img.shields.io/badge/license-MIT-blue.svg
 [license]: ./LICENSE
 [status-badge]: https://img.shields.io/badge/project%20status-alpha-brightgreen.svg
