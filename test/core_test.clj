@@ -74,7 +74,7 @@
       (decorated "World" {:fail? true})
       (catch Throwable e
         (is (= :here
-               (-> e .getCause ex-data :extra-info)))))))
+               (-> e ex-data :extra-info)))))))
 
 (deftest cancel-future-tests
   (let [a (atom 0)]
